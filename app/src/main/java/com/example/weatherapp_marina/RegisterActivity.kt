@@ -34,14 +34,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp_marina.ui.theme.WeatherApp_MarinaTheme
 
-class LoginActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             WeatherApp_MarinaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginPage(modifier = Modifier.padding(innerPadding))
+                    RegisterPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -51,9 +51,11 @@ class LoginActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun RegisterPage(modifier: Modifier = Modifier) {
+    var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var confirmPassword by rememberSaveable { mutableStateOf("") }
     val activity = LocalActivity.current as Activity
     Column(
         modifier = modifier
@@ -63,8 +65,17 @@ fun LoginPage(modifier: Modifier = Modifier) {
         horizontalAlignment = CenterHorizontally
     ) {
         Text(
-            text = "Faça login",
+            text = "Se cadastre",
             fontSize = 24.sp
+        )
+
+        Spacer(modifier = modifier.size(12.dp))
+
+        OutlinedTextField(
+            value = name,
+            label = { Text(text = "Digite seu nome") },
+            modifier = modifier.fillMaxWidth(fraction = 0.9f),
+            onValueChange = { name = it }
         )
 
         Spacer(modifier = modifier.size(12.dp))
@@ -86,47 +97,43 @@ fun LoginPage(modifier: Modifier = Modifier) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = modifier.size(12.dp))
+        Spacer(modifier = modifier.size(24.dp))
+
+        OutlinedTextField(
+            value = confirmPassword,
+            label = { Text(text = "Confirme sua senha") },
+            modifier = modifier.fillMaxWidth(fraction = 0.9f),
+            onValueChange = { confirmPassword = it },
+            visualTransformation = PasswordVisualTransformation()
+        )
 
         Row(modifier = modifier) {
             Button(
                 onClick = {
 
-                    Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Registrado!", Toast.LENGTH_LONG).show()
+
+                    activity.finish()
+
                     activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
+                        Intent(activity, LoginActivity::class.java).setFlags(
                             FLAG_ACTIVITY_SINGLE_TOP
                         )
                     )
                 },
-                enabled = email.isNotEmpty() && password.isNotEmpty()
-            ) {
-                Text("Login")
+                enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty(),
+            )
+            {
+                Text("Cadastrar")
             }
 
-            Spacer(modifier = modifier.size(12.dp))
+            Spacer(modifier = modifier.size(24.dp))
 
             Button(
-                onClick = { email = ""; password = "" },
-
+                onClick = { name = ""; email = ""; password = "" },
 
                 ) {
                 Text("Limpar")
-            }
-
-            Spacer(modifier = modifier.size(12.dp))
-
-            Button(
-                onClick = {
-                    activity.startActivity(
-                        Intent(activity, RegisterActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
-                }
-
-            ) {
-                Text("Cadastro")
             }
         }
     }
