@@ -1,6 +1,8 @@
 package com.example.weatherapp_marina
 
 import android.app.Activity
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -39,7 +41,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             WeatherApp_MarinaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        LoginPage(modifier = Modifier.padding(innerPadding))
+                    LoginPage(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -54,14 +56,19 @@ fun LoginPage(modifier: Modifier = Modifier) {
     var password by rememberSaveable { mutableStateOf("") }
     val activity = LocalActivity.current as Activity
     Column(
-        modifier = modifier.padding(16.dp).fillMaxSize(),
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
     ) {
         Text(
-            text = "Bem-vindo/a!",
+            text = "Faça login",
             fontSize = 24.sp
         )
+
+        Spacer(modifier = modifier.size(24.dp))
+
         OutlinedTextField(
             value = email,
             label = { Text(text = "Digite seu e-mail") },
@@ -82,11 +89,15 @@ fun LoginPage(modifier: Modifier = Modifier) {
         Spacer(modifier = modifier.size(24.dp))
 
         Row(modifier = modifier) {
-            Button( onClick = {
+            Button(onClick = {
 
                 Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-
-            } ) {
+                ; activity.startActivity(
+                Intent(activity, MainActivity::class.java).setFlags(
+                    FLAG_ACTIVITY_SINGLE_TOP
+                )
+            )
+            }) {
                 Text("Login")
             }
 
@@ -94,8 +105,9 @@ fun LoginPage(modifier: Modifier = Modifier) {
 
             Button(
                 onClick = { email = ""; password = "" },
-                enabled = email.isNotEmpty() && password.isNotEmpty()
-            ) {
+                enabled = email.isNotEmpty() && password.isNotEmpty(),
+
+                ) {
                 Text("Limpar")
             }
         }
