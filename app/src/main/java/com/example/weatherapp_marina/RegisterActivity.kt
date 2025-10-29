@@ -59,7 +59,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
     val activity = LocalActivity.current as Activity
     Column(
         modifier = modifier
-            .padding(16.dp)
+            .padding(10.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
@@ -69,7 +69,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             fontSize = 24.sp
         )
 
-        Spacer(modifier = modifier.size(12.dp))
 
         OutlinedTextField(
             value = name,
@@ -78,7 +77,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             onValueChange = { name = it }
         )
 
-        Spacer(modifier = modifier.size(12.dp))
 
         OutlinedTextField(
             value = email,
@@ -87,7 +85,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             onValueChange = { email = it }
         )
 
-        Spacer(modifier = modifier.size(12.dp))
 
         OutlinedTextField(
             value = password,
@@ -97,7 +94,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             visualTransformation = PasswordVisualTransformation()
         )
 
-        Spacer(modifier = modifier.size(24.dp))
 
         OutlinedTextField(
             value = confirmPassword,
@@ -111,15 +107,28 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
 
-                    Toast.makeText(activity, "Registrado!", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(activity, "Registrado!", Toast.LENGTH_LONG).show()
 
-                    activity.finish()
+//                    activity.finish()
 
-                    activity.startActivity(
+                    //faz a navegação para LoginActivity
+
+                    if (password == confirmPassword) {
+                        activity.startActivity(
                         Intent(activity, LoginActivity::class.java).setFlags(
                             FLAG_ACTIVITY_SINGLE_TOP
                         )
                     )
+                    }else {
+                        Toast.makeText(activity, "Não são iguais", Toast.LENGTH_LONG).show()
+                    }
+
+
+//                    activity.startActivity(
+//                        Intent(activity, LoginActivity::class.java).setFlags(
+//                            FLAG_ACTIVITY_SINGLE_TOP
+//                        )
+//                    )
                 },
                 enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty(),
             )
@@ -130,7 +139,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             Spacer(modifier = modifier.size(24.dp))
 
             Button(
-                onClick = { name = ""; email = ""; password = "" },
+                onClick = { name = ""; email = ""; password = ""; confirmPassword = " " },
 
                 ) {
                 Text("Limpar")
