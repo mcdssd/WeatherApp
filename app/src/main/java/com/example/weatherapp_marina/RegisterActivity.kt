@@ -144,6 +144,8 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                 ) {
                 Text("Limpar")
             }
+
+            //só quero commitar
         }
     }
 }
