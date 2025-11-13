@@ -107,10 +107,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
 
-//                    Toast.makeText(activity, "Registrado!", Toast.LENGTH_LONG).show()
-
-//                    activity.finish()
-
                     //faz a navegação para LoginActivity
 
                     if (password == confirmPassword) {
@@ -122,15 +118,8 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                     }else {
                         Toast.makeText(activity, "Não são iguais", Toast.LENGTH_LONG).show()
                     }
-
-
-//                    activity.startActivity(
-//                        Intent(activity, LoginActivity::class.java).setFlags(
-//                            FLAG_ACTIVITY_SINGLE_TOP
-//                        )
-//                    )
                 },
-                enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty(),
+                enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword,
             )
             {
                 Text("Cadastrar")
@@ -144,8 +133,6 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                 ) {
                 Text("Limpar")
             }
-
-            //só quero commitar
         }
     }
 }
