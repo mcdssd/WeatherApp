@@ -21,7 +21,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp_marina.model.MainViewModel
-import com.example.weatherapp_marina.ui.HomePage
 import com.example.weatherapp_marina.ui.nav.BottomNavBar
 import com.example.weatherapp_marina.ui.nav.BottomNavItem
 import com.example.weatherapp_marina.ui.nav.MainNavHost
@@ -33,8 +32,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel : MainViewModel by viewModels()
+
             val navController = rememberNavController()
+            val viewModel : MainViewModel by viewModels()
             WeatherApp_MarinaTheme {
                 Scaffold(
                     topBar = {
@@ -65,16 +65,15 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
+                    Box(modifier = Modifier.padding(innerPadding))
                         MainNavHost(
-                            navController = navController,
-                            viewModel = TODO()
+                            navController = navController, viewModel
                         )
                     }
                 }
             }
         }
     }
-}
+
 
 

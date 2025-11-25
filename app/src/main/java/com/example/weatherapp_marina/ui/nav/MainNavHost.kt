@@ -13,8 +13,8 @@ import com.example.weatherapp_marina.ui.MapPage
 @Composable
 fun MainNavHost(navController: NavHostController, viewModel: MainViewModel) {
     NavHost(navController, startDestination = Route.Home) {
-        composable<Route.Home> { HomePage() }
-        composable<Route.List> { ListPage() }
-        composable<Route.Map> { MapPage() }
+        composable<Route.Home> { HomePage(viewModel = viewModel)}
+        composable<Route.List> {  ListPage(viewModel = viewModel) }
+        composable<Route.Map> { MapPage(viewModel = viewModel) }
     }
 }
