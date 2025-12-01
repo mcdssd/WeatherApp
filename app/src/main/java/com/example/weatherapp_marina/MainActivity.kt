@@ -34,6 +34,8 @@ import com.example.weatherapp_marina.ui.theme.WeatherApp_MarinaTheme
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.weatherapp_marina.ui.nav.Route
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +58,11 @@ class MainActivity : ComponentActivity() {
                         TopAppBar(
                             title = { Text("Bem-vindo/a!") },
                             actions = {
-                                IconButton( onClick = { finish() } ) {
+                                IconButton( onClick = {
+                                    Firebase.auth.signOut()
+                                    finish()
+                                } )
+                                {
                                     Icon(
                                         imageVector =
                                             Icons.AutoMirrored.Filled.ExitToApp,

@@ -33,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp_marina.ui.theme.WeatherApp_MarinaTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,12 +106,25 @@ fun RegisterPage(modifier: Modifier = Modifier) {
         )
 
         Row(modifier = modifier) {
+            //botao registrar/cadastrar
             Button(
                 onClick = {
+                    Firebase.auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity) { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(activity,
+                                    "Registro OK!", Toast.LENGTH_LONG).show()
+                                activity.finish()
+                            } else {
+                                Toast.makeText(activity,
+                                    "Registro FALHOU!", Toast.LENGTH_LONG).show()
+                            }
+                        }
+
 
                     //faz a navegação para LoginActivity
 
-                    if (password == confirmPassword) {
+                   /* if (password == confirmPassword) {
                         activity.startActivity(
                         Intent(activity, LoginActivity::class.java).setFlags(
                             FLAG_ACTIVITY_SINGLE_TOP
@@ -117,7 +132,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                     )
                     }else {
                         Toast.makeText(activity, "Não são iguais", Toast.LENGTH_LONG).show()
-                    }
+                    } */
                 },
                 enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword,
             )
@@ -127,6 +142,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
 
             Spacer(modifier = modifier.size(24.dp))
 
+            //botao de limpar
             Button(
                 onClick = { name = ""; email = ""; password = ""; confirmPassword = "" },
 
