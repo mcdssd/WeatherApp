@@ -114,25 +114,12 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                             if (task.isSuccessful) {
                                 Toast.makeText(activity,
                                     "Registro OK!", Toast.LENGTH_LONG).show()
-                                activity.finish()
                             } else {
                                 Toast.makeText(activity,
                                     "Registro FALHOU!", Toast.LENGTH_LONG).show()
                             }
                         }
 
-
-                    //faz a navegação para LoginActivity
-
-                   /* if (password == confirmPassword) {
-                        activity.startActivity(
-                        Intent(activity, LoginActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
-                    }else {
-                        Toast.makeText(activity, "Não são iguais", Toast.LENGTH_LONG).show()
-                    } */
                 },
                 enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && confirmPassword.isNotEmpty() && password == confirmPassword,
             )

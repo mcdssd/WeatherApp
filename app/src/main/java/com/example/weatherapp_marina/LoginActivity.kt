@@ -1,5 +1,6 @@
 package com.example.weatherapp_marina
 
+import android.R.attr.enabled
 import android.app.Activity
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -33,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp_marina.ui.theme.WeatherApp_MarinaTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,15 +94,15 @@ fun LoginPage(modifier: Modifier = Modifier) {
         Row(modifier = modifier) {
             Button(
                 onClick = {
-
+                    Firebase.auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity) { task ->
+                            if (task.isSuccessful) {
                     Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                } else {
+                Toast.makeText(activity, "Login FALHOU!", Toast.LENGTH_LONG).show() }
+        }
                 },
-                enabled = email.isNotEmpty() && password.isNotEmpty()
+            enabled = email.isNotEmpty() && password.isNotEmpty()
             ) {
                 Text("Login")
             }
