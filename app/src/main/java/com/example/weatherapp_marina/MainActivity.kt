@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherapp_marina.model.MainViewModel
 import com.example.weatherapp_marina.ui.nav.BottomNavBar
@@ -33,6 +34,8 @@ import com.example.weatherapp_marina.ui.nav.MainNavHost
 import com.example.weatherapp_marina.ui.theme.WeatherApp_MarinaTheme
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.weatherapp_marina.model.MainViewModelFactory
+import com.example.weatherapp_marina.model.db.fb.FBDatabase
 import com.example.weatherapp_marina.ui.nav.Route
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -45,8 +48,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
+            val fbDB = remember { FBDatabase() }
+
             val navController = rememberNavController()
-            val viewModel : MainViewModel by viewModels()
+            val viewModel : MainViewModel = viewModel(
+                factory = MainViewModelFactory(fbDB)
+            )
             var showDialog by remember { mutableStateOf(false) }
 
             val currentRoute = navController.currentBackStackEntryAsState()
