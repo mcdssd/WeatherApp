@@ -12,24 +12,25 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.weatherapp_marina.model.MainViewModel
 
 @Composable
 fun BottomNavBar(
-    navController: NavHostController,
+    viewModel: MainViewModel,
     items: List<BottomNavItem>
 ) {
     NavigationBar(
         contentColor = Color.Black
     ) {
 
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-       // val currentRoute = navBackStackEntry?.destination?.route
+//        val navBackStackEntry by navController.currentBackStackEntryAsState()
+//        val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
 
-            val isSelected =
-                navBackStackEntry?.destination
-                    ?.hasRoute(item.route::class) == true
+//            val isSelected =
+//                navBackStackEntry?.destination
+//                    ?.hasRoute(item.route::class) == true
 
             NavigationBarItem(
                 icon = {
@@ -43,19 +44,22 @@ fun BottomNavBar(
                         fontSize = 12.sp)
                 },
                 alwaysShowLabel = true,
-                selected = isSelected,
-
+                selected = viewModel.page == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
-                        }
-
-                        launchSingleTop = true
-
-                        restoreState = true
-                    }
+                    viewModel.page = item.route
                 }
+
+//                onClick = {
+//                    navController.navigate(item.route) {
+//                        popUpTo(navController.graph.startDestinationId) {
+//                            saveState = true
+//                        }
+//
+//                        launchSingleTop = true
+//
+//                        restoreState = true
+//                    }
+//                }
             )
         }
     }

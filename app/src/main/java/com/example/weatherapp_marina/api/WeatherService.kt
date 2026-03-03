@@ -1,6 +1,8 @@
 package com.example.weatherapp_marina.api
 
 import android.util.Log
+//import com.example.weatherapp_marina.model.APIWeatherForecast
+import com.example.weatherapp_marina.model.Weather
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,4 +38,50 @@ class WeatherService {
             }
         })
     }
+
+    fun getWeather(name: String, onResponse: (APICurrentWeather?) -> Unit){
+        val call: Call<APICurrentWeather?> = weatherAPI.weather(name)
+        enqueue(call) { onResponse.invoke(it) }
+    }
+
+    fun getForecast(name: String, onResponse : (APIWeatherForecast?) -> Unit) {
+        val call: Call<APIWeatherForecast?> = weatherAPI.forecast(name)
+        enqueue(call) { onResponse.invoke(it) }
+    }
+
+    private fun <T> enqueue(call : Call<T?>, onResponse : ((T?) -> Unit)? = null){
+        call.enqueue(object : Callback<T?> {
+            override fun onResponse(call: Call<T?>, response: Response<T?>) {
+                val obj: T? = response.body()
+                onResponse?.invoke(obj)
+            }
+            override fun onFailure(call: Call<T?>, t: Throwable) {
+                Log.w("WeatherApp WARNING", "" + t.message)
+            }
+        })
+    }
+}
+
+data class APICondition (
+    var text : String? = null,
+    var icon : String? = null
+)
+data class APIWeather (
+    var last_updated: String? = null,
+    var temp_c : Double? = 0.0,
+    var maxtemp_c: Double? = 0.0,
+    var mintemp_c: Double? = 0.0,
+    var condition : APICondition? = null
+)
+data class APICurrentWeather (
+    var location : APILocation? = null,
+    var current : APIWeather? = null
+)
+fun APICurrentWeather.toWeather() : Weather {
+    return Weather (
+        date = current?.last_updated?:"...",
+        desc = current?.condition?.text?:"...",
+        temp = current?.temp_c?:-1.0,
+        imgUrl = "https:" + current?.condition?.icon
+    )
 }

@@ -35,7 +35,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp_marina.model.City
 import com.example.weatherapp_marina.model.MainViewModel
-import com.example.weatherapp_marina.model.getCities
+import com.example.weatherapp_marina.model.Weather
+import com.example.weatherapp_marina.ui.nav.Route
 
 @Composable
 fun ListPage(modifier: Modifier = Modifier,
@@ -50,11 +51,14 @@ fun ListPage(modifier: Modifier = Modifier,
             .fillMaxSize()
             .padding(8.dp)
     )  {
-        items(cityList, key = { it.name }) { city ->
-            CityItem(city = city, onClose = {
+            items(items = cityList, key = { it.name } ) { city ->
+                CityItem(city = city, weather = viewModel.weather(city.name), onClose = {
                 viewModel.remove(city)
                 Toast.makeText(activity, "fechou", Toast.LENGTH_LONG).show()
             }, onClick = {
+                viewModel.city = city.name
+                    viewModel.page = Route.Home
+
                 Toast.makeText(activity, "abriu", Toast.LENGTH_LONG).show()
             })
         }
@@ -66,30 +70,46 @@ fun ListPage(modifier: Modifier = Modifier,
 @Composable
 fun CityItem(
     city: City,
+    weather: Weather,
     onClick: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val desc = if (weather == Weather.LOADING)
+        "Carregando clima..."
+    else
+        weather.desc
+
     Row(
-        modifier = modifier.fillMaxWidth().padding(8.dp).clickable { onClick() },
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             Icons.Rounded.FavoriteBorder,
             contentDescription = ""
         )
+
         Spacer(modifier = Modifier.size(12.dp))
-        Column(modifier = modifier.weight(1f)) {
-            Text(modifier = Modifier,
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
                 text = city.name,
-                fontSize = 24.sp)
-            Text(modifier = Modifier,
-                text = city.weather?:"Carregando clima...",
-                fontSize = 16.sp)
+                fontSize = 24.sp
+            )
+
+            Text(
+                text = desc,
+                fontSize = 16.sp
+            )
         }
+
         IconButton(onClick = onClose) {
             Icon(Icons.Filled.Close, contentDescription = "Close")
         }
     }
 }
+
 
