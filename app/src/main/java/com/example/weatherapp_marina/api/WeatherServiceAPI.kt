@@ -1,6 +1,6 @@
 package com.example.weatherapp_marina.api
 
-import com.example.weatherapp_marina.model.APIWeatherForecast
+//import com.example.weatherapp_marina.model.APIWeatherForecast
 import com.example.weatherapp_marina.BuildConfig
 import retrofit2.Call
 import retrofit2.http.GET

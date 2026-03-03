@@ -7,6 +7,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp_marina.api.WeatherService
+import com.example.weatherapp_marina.api.toForecast
 import com.example.weatherapp_marina.api.toWeather
 import com.example.weatherapp_marina.model.db.fb.FBCity
 import com.example.weatherapp_marina.model.db.fb.FBDatabase
@@ -14,6 +15,7 @@ import com.example.weatherapp_marina.model.db.fb.FBUser
 import com.example.weatherapp_marina.model.db.fb.toFBCity
 import com.google.android.gms.maps.model.LatLng
 import com.example.weatherapp_marina.model.Forecast
+import com.example.weatherapp_marina.ui.nav.Route
 
 class MainViewModel (private val db: FBDatabase,
                      private val service : WeatherService
@@ -41,9 +43,19 @@ class MainViewModel (private val db: FBDatabase,
         db.remove(city.toFBCity())
     }
 
-    fun add(name: String, location : LatLng? = null) {
-        db.add(City(name = name, location = location).toFBCity())
-    }
+    private var _page = mutableStateOf<Route>(Route.Home)
+    var page: Route
+        get() = _page.value
+        set(tmp) { _page.value = tmp }
+
+//    fun add(name: String, location : LatLng? = null) {
+//        db.add(City(name = name, location = location).toFBCity())
+//    }
+fun add(name: String, location: LatLng? = null) {
+    val city = City(name = name, location = location)
+    _cities[name] = city   // atualização direta
+}
+
     override fun onUserLoaded(user: FBUser) {
         _user.value = user.toUser()
     }
