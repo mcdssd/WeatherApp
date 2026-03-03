@@ -27,16 +27,19 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import coil.compose.AsyncImage
 import com.example.weatherapp_marina.model.City
 import com.example.weatherapp_marina.model.MainViewModel
 import com.example.weatherapp_marina.model.Weather
 import com.example.weatherapp_marina.ui.nav.Route
+import com.example.weatherapp_marina.R
 
 @Composable
 fun ListPage(modifier: Modifier = Modifier,
@@ -87,9 +90,15 @@ fun CityItem(
             .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            Icons.Rounded.FavoriteBorder,
-            contentDescription = ""
+//        Icon(
+//            Icons.Rounded.FavoriteBorder,
+//            contentDescription = ""
+//        )
+        AsyncImage( // Substitui o Icon(...)
+            model = weather.imgUrl,
+            modifier = Modifier.size(75.dp),
+            error = painterResource(id = R.drawable.loading_icon),
+            contentDescription = "Imagem"
         )
 
         Spacer(modifier = Modifier.size(12.dp))

@@ -1,6 +1,11 @@
 package com.example.weatherapp_marina.api
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import coil.ImageLoader
+import coil.request.ImageRequest
 //import com.example.weatherapp_marina.model.APIWeatherForecast
 import com.example.weatherapp_marina.model.Weather
 import retrofit2.Call
@@ -9,8 +14,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class WeatherService {
+class WeatherService (private val context : Context){
     private var weatherAPI: WeatherServiceAPI
+
+    private val imageLoader = ImageLoader.Builder(context)
+        .allowHardware(false).build()
 
     init {
         val retrofitAPI = Retrofit.Builder().baseUrl(WeatherServiceAPI.BASE_URL)
@@ -60,28 +68,21 @@ class WeatherService {
             }
         })
     }
+
+    fun getBitmap(imgUrl: String, onResponse: (Bitmap?) -> Unit) {
+        val request = ImageRequest.Builder(context)
+            .data(imgUrl).allowHardware(false).target(
+                onSuccess = { drawable ->
+                    val bitmap = (drawable as BitmapDrawable).bitmap
+                    onResponse(bitmap)
+                },
+                onError = { // handle failure
+                    }
+                    )
+                    .build()
+                    imageLoader.enqueue(request)
+                }
+
 }
 
-data class APICondition (
-    var text : String? = null,
-    var icon : String? = null
-)
-data class APIWeather (
-    var last_updated: String? = null,
-    var temp_c : Double? = 0.0,
-    var maxtemp_c: Double? = 0.0,
-    var mintemp_c: Double? = 0.0,
-    var condition : APICondition? = null
-)
-data class APICurrentWeather (
-    var location : APILocation? = null,
-    var current : APIWeather? = null
-)
-fun APICurrentWeather.toWeather() : Weather {
-    return Weather (
-        date = current?.last_updated?:"...",
-        desc = current?.condition?.text?:"...",
-        temp = current?.temp_c?:-1.0,
-        imgUrl = "https:" + current?.condition?.icon
-    )
-}
+
