@@ -9,32 +9,51 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BottomNavBar(navController: NavHostController, items : List<BottomNavItem>) {
+fun BottomNavBar(
+    navController: NavHostController,
+    items: List<BottomNavItem>
+) {
     NavigationBar(
         contentColor = Color.Black
     ) {
+
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination
+       // val currentRoute = navBackStackEntry?.destination?.route
+
         items.forEach { item ->
-            NavigationBarItem (
-                icon = { Icon(imageVector = item.icon, contentDescription= item.title)},
-                label = { Text(text = item.title, fontSize = 12.sp) },
+
+            val isSelected =
+                navBackStackEntry?.destination
+                    ?.hasRoute(item.route::class) == true
+
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.title
+                    )
+                },
+                label = {
+                    Text(text = item.title,
+                        fontSize = 12.sp)
+                },
                 alwaysShowLabel = true,
-                selected = currentRoute == item.route,
+                selected = isSelected,
+
                 onClick = {
                     navController.navigate(item.route) {
-// Volta pilha de navegação até HomePage (startDest).
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {
-                                saveState = true
-                            }
-                            restoreState = true
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
                         }
+
                         launchSingleTop = true
+
+                        restoreState = true
                     }
                 }
             )

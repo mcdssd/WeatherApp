@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.ui.graphics.vector.ImageVector
-import kotlinx.serialization.Serializable // em caso de erro
+import kotlinx.serialization.Serializable
 sealed interface Route {
     @Serializable
     data object Home : Route
